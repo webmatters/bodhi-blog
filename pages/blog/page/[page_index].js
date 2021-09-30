@@ -1,33 +1,29 @@
-import fs from "fs"
-import path from "path"
+import fs from 'fs'
+import path from 'path'
 
-import { getPosts } from "@/lib/posts"
-import { POSTS_PER_PAGE } from "@/config/index"
-import Layout from "@/components/Layout"
-import Post from "@/components/Post"
-import Pagination from "@/components/Pagination"
-import CategoryList from "@/components/CategoryList"
+import { getPosts } from '@/lib/posts'
+import { POSTS_PER_PAGE } from '@/config/index'
+import Layout from '@/components/Layout'
+import Post from '@/components/Post'
+import Pagination from '@/components/Pagination'
+import CategoryList from '@/components/CategoryList'
 
 export default function BlogPage({ posts, numPages, currentPage, categories }) {
   return (
     <Layout>
-      <div className="flex justify-between">
-        <div className="w-4/5 mr-10">
-          <h1 className="text-5xl border-b-4 p-5 font-bold">Blog</h1>
+      <div className='flex justify-between'>
+        <div className='w-4/5 mr-10'>
+          <h1 className='text-5xl border-b-4 p-5 font-bold'>Blog</h1>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
             {posts.map((post, index) => (
-              <Post
-                key={index}
-                frontmatter={post.frontmatter}
-                slug={post.slug}
-              />
+              <Post key={index} post={post} />
             ))}
           </div>
           <Pagination currentPage={currentPage} numPages={numPages} />
         </div>
 
-        <div className="w-1/5">
+        <div className='w-1/5'>
           <CategoryList categories={categories} />
         </div>
       </div>
@@ -37,7 +33,7 @@ export default function BlogPage({ posts, numPages, currentPage, categories }) {
 
 // Runs on the server
 export async function getStaticPaths() {
-  const files = fs.readdirSync(path.join("posts"))
+  const files = fs.readdirSync(path.join('posts'))
   const numPages = Math.ceil(files.length / POSTS_PER_PAGE)
 
   let paths = []
@@ -55,7 +51,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const page = parseInt((params && params.page_index) || 1)
-  const files = fs.readdirSync(path.join("posts"))
+  const files = fs.readdirSync(path.join('posts'))
 
   const posts = getPosts()
 
